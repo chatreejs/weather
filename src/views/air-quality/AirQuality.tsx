@@ -5,6 +5,7 @@ import { AirQuality as AirQualityModel } from '@models';
 import { AirQualityService } from '@services';
 import { Skeleton } from 'antd';
 import AirQualityHeader from './components/AirQualityHeader';
+import AirQualityHistorical from './components/AirQualityHistorical';
 import AirQualityOverview from './components/AirQualityOverview';
 
 const Container = styled.div`
@@ -34,6 +35,7 @@ const HeaderContainer = styled(Container)`
 
 const ContentWrapper = styled(Container)`
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   padding-bottom: 72px;
   border-bottom: 1px solid #e6e6e6;
@@ -71,6 +73,7 @@ const AirQuality: React.FC = () => {
       <ContentWrapper>
         {isLoading && <Skeleton active />}
         {!isLoading && <AirQualityOverview airQuality={airQuality} />}
+        {!isLoading && <AirQualityHistorical location={airQuality.location} />}
       </ContentWrapper>
     </>
   );

@@ -11,4 +11,14 @@ export class AirQualityService {
       axiosInstance.get<AirQuality>(`${this.apiEndpoint}/current`),
     ).pipe(map((response) => response.data));
   }
+
+  static getAirQualityHistory(interval: string): Observable<AirQuality[]> {
+    const params = new URLSearchParams();
+    params.append('interval', interval);
+    return from(
+      axiosInstance.get<AirQuality[]>(`${this.apiEndpoint}/history`, {
+        params,
+      }),
+    ).pipe(map((response) => response.data));
+  }
 }

@@ -22,6 +22,7 @@
     "antd": "5.14.0",
     "axios": "^1.4.0",
     "dayjs": "^1.11.10",
+    "highcharts-react-official": "^3.2.1",
     "react": "^18.2.0",
     "react-countup": "^6.5.0",
     "react-dom": "^18.2.0",
