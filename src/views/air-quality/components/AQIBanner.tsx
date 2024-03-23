@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { AQICategory } from '@enums';
 import { getAQICategory } from '@utils';
 import FaceGreenImage from '../../../assets/images/ic-face-green.svg';
+import FaceMaroonImage from '../../../assets/images/ic-face-maroon.svg';
 import FaceOrangeImage from '../../../assets/images/ic-face-orange.svg';
 import FacePurpleImage from '../../../assets/images/ic-face-purple.svg';
 import FaceRedImage from '../../../assets/images/ic-face-red.svg';
@@ -152,10 +153,10 @@ const AQIBanner: React.FC<AQIBannerProps> = ({ airQualityIndex }) => {
         setImage(FacePurpleImage);
         break;
       case AQICategory.HAZARDOUS:
-        setSummaryBackground('#a97abc');
-        setSummaryColor('#543b63');
-        setBoxColor('#8a5d9d');
-        setImage(FacePurpleImage);
+        setSummaryBackground('#a87383');
+        setSummaryColor('#573344');
+        setBoxColor('#915c6c');
+        setImage(FaceMaroonImage);
         break;
       default:
         break;
