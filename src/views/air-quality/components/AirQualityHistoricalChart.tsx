@@ -2,8 +2,9 @@ import Highcharts from 'highcharts';
 import HighchartsReact from 'highcharts-react-official';
 import { useEffect, useState } from 'react';
 
+import { AQICategory } from '@enums';
 import { AirQuality } from '@models';
-import { getAQICategory } from '@utils';
+import { getAQIBoundary, getAQICategory, getAQICategoryFromPM25 } from '@utils';
 
 interface AirQualityHistoricalChartProps {
   airQualityList: AirQuality[];
@@ -22,7 +23,6 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
         fontFamily:
           '"Lucida Grande", "Lucida Sans Unicode", Arial, Helvetica, sans-serif',
       },
-      animation: false,
     },
     title: {
       text: '',
@@ -35,9 +35,11 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
       labels: {
         format: '{value:%d %b, %I:%M %p}',
       },
-      tickInterval: 24 * 3600 * 100,
+      tickInterval: 1000 * 60 * 60 * 5,
       gridLineWidth: 1,
       gridLineColor: '#fff',
+      lineColor: '#ccd6eb',
+      tickColor: '#ccd6eb',
     },
     yAxis: {
       title: {
@@ -51,38 +53,70 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
     credits: {
       enabled: false,
     },
-    tooltip: {
-      formatter: function () {
-        return `${Highcharts.dateFormat('%d %b, %I:%M %p', this.x)}<br/>AQI US - ${getAQICategory(this.y)} <b>${this.y}</b>`;
-      },
-    },
     series: [],
   });
 
   useEffect(() => {
+    if (!airQualityList.length) return;
     // Calculate the maximum value in the data set
-    const maxVal = Math.max(...airQualityList.map((data) => data.aqi));
+    const maxVal = Math.max(
+      ...airQualityList.map((data) => {
+        if (pollutionType === 'aqi') {
+          return data.aqi;
+        } else if (pollutionType === 'pm25') {
+          return data.pm25;
+        } else if (pollutionType === 'pm10') {
+          return data.pm10;
+        } else if (pollutionType === 'no2') {
+          return data.no2;
+        } else if (pollutionType === 'so2') {
+          return data.so2;
+        } else if (pollutionType === 'co') {
+          return data.co;
+        }
+      }),
+    );
 
     // update chart options
     setChartOptions((prevOptions) => ({
       ...prevOptions,
+      xAxis: {
+        ...prevOptions.xAxis,
+      },
       yAxis: {
         ...prevOptions.yAxis,
-        max: maxVal > 50 ? null : 50, // If the maximum value is over 50, set yAxis.max to null
+        max: maxVal > 50 ? null : 50,
+      },
+      tooltip: {
+        formatter: function () {
+          if (pollutionType === 'aqi') {
+            return `${Highcharts.dateFormat('%d %b, %I:%M %p', this.x)}<br/>AQI US - ${getAQICategory(this.y)} <b>${this.y}</b>`;
+          } else if (pollutionType === 'pm25') {
+            return `${Highcharts.dateFormat('%d %b, %I:%M %p', this.x)}<br/>PM2.5 µg/m³ - ${getAQICategoryFromPM25(this.y)} <b>${this.y}</b>`;
+          }
+        },
       },
       series: [
         {
           colorByPoint: true,
           animation: false,
-          data: airQualityList.map((data) => ({
-            y: data.aqi,
-            x:
-              new Date(data.lastUpdate).getTime() -
-              new Date().getTimezoneOffset() * 60 * 1000,
-          })),
+          data: airQualityList.map((data) => {
+            let dataY;
+            if (pollutionType === 'aqi') {
+              dataY = data.aqi;
+            } else if (pollutionType === 'pm25') {
+              dataY = data.pm25;
+            }
+            return {
+              y: dataY,
+              x:
+                new Date(data.lastUpdate).getTime() -
+                new Date(data.lastUpdate).getTimezoneOffset() * 60 * 1000,
+            };
+          }),
           zones: [
             {
-              value: 50,
+              value: getAQIBoundary(AQICategory.GOOD, pollutionType)[1],
               color: {
                 linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
                 stops: [
@@ -92,7 +126,7 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
               },
             },
             {
-              value: 100,
+              value: getAQIBoundary(AQICategory.MODERATE, pollutionType)[1],
               color: {
                 linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
                 stops: [
@@ -102,7 +136,10 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
               },
             },
             {
-              value: 150,
+              value: getAQIBoundary(
+                AQICategory.UNHEALTHY_FOR_SENSITIVE_GROUPS,
+                pollutionType,
+              )[1],
               color: {
                 linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
                 stops: [
@@ -112,7 +149,7 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
               },
             },
             {
-              value: 200,
+              value: getAQIBoundary(AQICategory.UNHEALTHY, pollutionType)[1],
               color: {
                 linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
                 stops: [
@@ -122,7 +159,10 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
               },
             },
             {
-              value: 300,
+              value: getAQIBoundary(
+                AQICategory.VERY_UNHEALTHY,
+                pollutionType,
+              )[1],
               color: {
                 linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
                 stops: [

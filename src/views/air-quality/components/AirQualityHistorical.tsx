@@ -1,7 +1,7 @@
 import { SectionTitle } from '@components';
 import { AirQuality } from '@models';
 import { AirQualityService } from '@services';
-import { Card } from 'antd';
+import { Card, Flex, Radio, RadioChangeEvent } from 'antd';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import AirQualityHistoricalChart from './AirQualityHistoricalChart';
@@ -35,6 +35,11 @@ const HistoricalWrapper = styled.div`
   }
 `;
 
+const ChartWrapper = styled.div`
+  margin: 20px 0;
+  max-height: 400px;
+`;
+
 interface AirQualityHistoricalProps {
   location: string;
 }
@@ -43,9 +48,19 @@ const AirQualityHistorical: React.FC<AirQualityHistoricalProps> = ({
   location,
 }) => {
   const [airQuality, setAirQuality] = useState<AirQuality[]>([]);
+  const [interval, setInterval] = useState('hourly');
+  const [pollutionType, setPollutionType] = useState('aqi');
+
+  const onIntervalRadioChange = (e: RadioChangeEvent) => {
+    setInterval(e.target.value);
+  };
+
+  const onPollutionTypeRadioChange = (e: RadioChangeEvent) => {
+    setPollutionType(e.target.value);
+  };
 
   useEffect(() => {
-    AirQualityService.getAirQualityHistory('d').subscribe({
+    AirQualityService.getAirQualityHistory(interval).subscribe({
       next: (airQuality) => {
         setAirQuality(airQuality);
       },
@@ -53,17 +68,53 @@ const AirQualityHistorical: React.FC<AirQualityHistoricalProps> = ({
         console.error('Error while fetching air quality data', error);
       },
     });
-  }, []);
+  }, [interval]);
 
   return (
     <HistoricalWrapper>
       <Card bordered={false}>
         <SectionTitle title="Historical" />
         <h2 className="title">Historic air quality graph: {location}</h2>
-        <AirQualityHistoricalChart
-          airQualityList={airQuality}
-          pollutionType="pm25"
-        />
+        <Flex
+          justify="center"
+          align="center"
+          style={{
+            padding: '0 24px',
+          }}
+        >
+          <Radio.Group
+            size="large"
+            buttonStyle="solid"
+            value={interval}
+            onChange={onIntervalRadioChange}
+          >
+            <Radio.Button value="hourly">Hourly</Radio.Button>
+            <Radio.Button value="daily">Daily</Radio.Button>
+          </Radio.Group>
+        </Flex>
+        <ChartWrapper>
+          <AirQualityHistoricalChart
+            airQualityList={airQuality}
+            pollutionType={pollutionType}
+          />
+        </ChartWrapper>
+        <Flex
+          justify="center"
+          align="center"
+          style={{
+            padding: '0 24px',
+          }}
+        >
+          <Radio.Group
+            size="large"
+            buttonStyle="solid"
+            value={pollutionType}
+            onChange={onPollutionTypeRadioChange}
+          >
+            <Radio.Button value="aqi">AQI</Radio.Button>
+            <Radio.Button value="pm25">PM2.5</Radio.Button>
+          </Radio.Group>
+        </Flex>
       </Card>
     </HistoricalWrapper>
   );
