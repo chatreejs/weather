@@ -1,4 +1,5 @@
 import { Card } from 'antd';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { SectionTitle } from '@components';
@@ -6,6 +7,7 @@ import { AirQuality } from '@models';
 import AQIBanner from './AQIBanner';
 import MainPollutionTable from './MainPollutionTable';
 import OtherPollutionTable from './OtherPollutionTable';
+import WHOGuideline from './WHOGuideline';
 
 const OverviewWrapper = styled.div`
   width: 100%;
@@ -39,6 +41,11 @@ const OverviewDetails = styled.div`
     font-weight: 500;
     letter-spacing: normal;
     margin-bottom: 32px;
+
+    @media only screen and (max-width: 960px) {
+      font-size: 17px;
+      line-height: 1.53;
+      margin-bottom: 16px;
   }
 `;
 
@@ -49,6 +56,16 @@ interface AirQualityOverviewProps {
 const AirQualityOverview: React.FC<AirQualityOverviewProps> = ({
   airQuality,
 }) => {
+  const [showWHO, setShowWHO] = useState<boolean>(false);
+
+  useEffect(() => {
+    if (airQuality.pm25 > 5) {
+      setShowWHO(true);
+    } else {
+      setShowWHO(false);
+    }
+  }, []);
+
   return (
     <OverviewWrapper>
       <Card bordered={false}>
@@ -60,6 +77,7 @@ const AirQualityOverview: React.FC<AirQualityOverviewProps> = ({
           </h2>
           <MainPollutionTable aqi={airQuality.aqi} />
           <OtherPollutionTable airQuality={airQuality} />
+          {showWHO && <WHOGuideline airQuality={airQuality} />}
           {/* <SectionTitle title="Health Recommendations" /> */}
         </OverviewDetails>
       </Card>
