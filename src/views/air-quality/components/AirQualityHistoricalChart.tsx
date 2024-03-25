@@ -35,7 +35,7 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
       labels: {
         format: '{value:%d %b, %I:%M %p}',
       },
-      tickInterval: 1000 * 60 * 60 * 5,
+      tickInterval: 1000 * 60 * 60 * 10,
       gridLineWidth: 1,
       gridLineColor: '#fff',
       lineColor: '#ccd6eb',
@@ -45,7 +45,14 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
       title: {
         enabled: false,
       },
+      min: 0,
+      tickInterval: 50,
       gridLineWidth: 0,
+    },
+    plotOptions: {
+      column: {
+        borderWidth: 0,
+      },
     },
     legend: {
       enabled: false,
