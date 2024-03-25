@@ -48,7 +48,7 @@ const AirQuality: React.FC = () => {
   useEffect(() => {
     AirQualityService.getCurrentAirQuality().subscribe({
       next: (airQuality) => {
-        airQuality.location = 'Aspire Asoke - Ratchada, Bangkok';
+        airQuality.location = 'Aspire Asoke-Ratchada, Bangkok';
         setAirQuality(airQuality);
         setIsLoading(false);
       },
