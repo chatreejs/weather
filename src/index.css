@@ -4,6 +4,12 @@
   list-style: none;
 }
 
+*,
+:after,
+:before {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   font-family:
@@ -22,4 +28,88 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+.aqi-green {
+  color: #607631;
+  background: #a8e05f;
+}
+
+.aqi-box-green {
+  background: #87c13c;
+}
+
+.aqi-light-green {
+  color: #607631;
+  background: #def3c2;
+}
+
+.aqi-yellow {
+  color: #8c6c1d;
+  background: #fdd64b;
+}
+
+.aqi-box-yellow {
+  background: #efbe1d;
+}
+
+.aqi-light-yellow {
+  color: #8c6c1d;
+  background: #feeeb5;
+}
+
+.aqi-orange {
+  color: #974a20;
+  background: #ff9b57;
+}
+
+.aqi-box-orange {
+  background: #f27e2f;
+}
+
+.aqi-light-orange {
+  color: #974a20;
+  background: #fdd5bd;
+}
+
+.aqi-red {
+  color: #942431;
+  background: #fe6a69;
+}
+
+.aqi-box-red {
+  background: #e84b50;
+}
+
+.aqi-light-red {
+  color: #942431;
+  background: #ffc5c5;
+}
+
+.aqi-purple {
+  color: #543b63;
+  background: #a97abc;
+}
+
+.aqi-box-purple {
+  background: #8a5d9d;
+}
+
+.aqi-light-purple {
+  color: #543b63;
+  background: #dfcae7;
+}
+
+.aqi-maroon {
+  color: #573344;
+  background: #a87383;
+}
+
+.aqi-box-maroon {
+  background: #915c6c;
+}
+
+.aqi-light-maroon {
+  color: #573344;
+  background: #e3ccd2;
 }

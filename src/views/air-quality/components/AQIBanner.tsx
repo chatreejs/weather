@@ -10,15 +10,13 @@ import FacePurpleImage from '../../../assets/images/ic-face-purple.svg';
 import FaceRedImage from '../../../assets/images/ic-face-red.svg';
 import FaceYellowImage from '../../../assets/images/ic-face-yellow.svg';
 
-const AQISummary = styled.div<{ background: string; color: string }>`
+const AQISummary = styled.div`
   display: flex !important;
   justify-content: space-between;
   font-size: 12px;
   border-top-left-radius: 8px;
   border-top-right-radius: 8px;
   padding: 32px;
-  background: ${({ background }) => background};
-  color: ${({ color }) => color};
 `;
 
 const AQIValueWrapper = styled.div`
@@ -30,7 +28,7 @@ const AQIValueWrapper = styled.div`
   }
 `;
 
-const AQIBox = styled.div<{ background: string }>`
+const AQIBox = styled.div`
   display: flex;
   width: 113px;
   height: 36px;
@@ -40,7 +38,6 @@ const AQIBox = styled.div<{ background: string }>`
   align-items: center;
   padding: 12px;
   margin-right: 24px;
-  background: ${({ background }) => background};
   box-sizing: border-box;
 
   @media only screen and (min-width: 960px) {
@@ -112,9 +109,7 @@ interface AQIBannerProps {
 }
 
 const AQIBanner: React.FC<AQIBannerProps> = ({ airQualityIndex }) => {
-  const [summaryBackground, setSummaryBackground] = useState<string>('');
-  const [summaryColor, setSummaryColor] = useState<string>('');
-  const [boxColor, setBoxColor] = useState<string>('');
+  const [aqiColor, setAqiColor] = useState<string>('');
   const [statusText, setStatusText] = useState<string>('');
   const [image, setImage] = useState<string>('');
 
@@ -123,39 +118,27 @@ const AQIBanner: React.FC<AQIBannerProps> = ({ airQualityIndex }) => {
     setStatusText(aqiStatus);
     switch (aqiStatus) {
       case AQICategory.GOOD:
-        setSummaryBackground('#a8e05f');
-        setSummaryColor('#607631');
-        setBoxColor('#87c13c');
+        setAqiColor('green');
         setImage(FaceGreenImage);
         break;
       case AQICategory.MODERATE:
-        setSummaryBackground('#fdd64b');
-        setSummaryColor('#8c6c1d');
-        setBoxColor('#efbe1d');
+        setAqiColor('yellow');
         setImage(FaceYellowImage);
         break;
       case AQICategory.UNHEALTHY_FOR_SENSITIVE_GROUPS:
-        setSummaryBackground('#ff9b57');
-        setSummaryColor('#974a20');
-        setBoxColor('#f27e2f');
+        setAqiColor('orange');
         setImage(FaceOrangeImage);
         break;
       case AQICategory.UNHEALTHY:
-        setSummaryBackground('#fe6a69');
-        setSummaryColor('#942431');
-        setBoxColor('#e84b50');
+        setAqiColor('red');
         setImage(FaceRedImage);
         break;
       case AQICategory.VERY_UNHEALTHY:
-        setSummaryBackground('#a97abc');
-        setSummaryColor('#543b63');
-        setBoxColor('#8a5d9d');
+        setAqiColor('purple');
         setImage(FacePurpleImage);
         break;
       case AQICategory.HAZARDOUS:
-        setSummaryBackground('#a87383');
-        setSummaryColor('#573344');
-        setBoxColor('#915c6c');
+        setAqiColor('maroon');
         setImage(FaceMaroonImage);
         break;
       default:
@@ -164,9 +147,9 @@ const AQIBanner: React.FC<AQIBannerProps> = ({ airQualityIndex }) => {
   }, [airQualityIndex]);
 
   return (
-    <AQISummary background={summaryBackground} color={summaryColor}>
+    <AQISummary className={`aqi-${aqiColor}`}>
       <AQIValueWrapper>
-        <AQIBox background={boxColor}>
+        <AQIBox className={`aqi-box-${aqiColor}`}>
           <AQIValueUnit>US AQI</AQIValueUnit>
           <AQIValue>{airQualityIndex}</AQIValue>
         </AQIBox>
