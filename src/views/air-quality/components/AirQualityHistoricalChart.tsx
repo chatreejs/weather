@@ -9,11 +9,13 @@ import { getAQIBoundary, getAQICategory, getAQICategoryFromPM25 } from '@utils';
 interface AirQualityHistoricalChartProps {
   airQualityList: AirQuality[];
   pollutionType: string;
+  interval: 'hourly' | 'daily';
 }
 
 const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
   airQualityList,
   pollutionType,
+  interval,
 }) => {
   const [chartOptions, setChartOptions] = useState({
     chart: {
@@ -33,9 +35,11 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
     xAxis: {
       type: 'datetime',
       labels: {
-        format: '{value:%d %b, %I:%M %p}',
+        format:
+          interval === 'hourly'
+            ? '{value:%d %b, %I:%M %p}'
+            : '{value: %a, %d %B}',
       },
-      tickInterval: 1000 * 60 * 60 * 10,
       gridLineWidth: 1,
       gridLineColor: '#fff',
       lineColor: '#ccd6eb',
@@ -89,6 +93,8 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
       ...prevOptions,
       xAxis: {
         ...prevOptions.xAxis,
+        tickInterval:
+          interval === 'hourly' ? 1000 * 3600 * 10 : 1000 * 3600 * 24 * 5,
       },
       yAxis: {
         ...prevOptions.yAxis,
@@ -97,16 +103,20 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
       tooltip: {
         formatter: function () {
           if (pollutionType === 'aqi') {
-            return `${Highcharts.dateFormat('%d %b, %I:%M %p', this.x)}<br/>AQI US - ${getAQICategory(this.y)} <b>${this.y}</b>`;
+            return `${Highcharts.dateFormat(interval == 'hourly' ? '%d %b, %I:%M %p' : '%a, %d %B', this.x)}<br/>AQI US - ${getAQICategory(this.y)} <b>${this.y}</b>`;
           } else if (pollutionType === 'pm25') {
-            return `${Highcharts.dateFormat('%d %b, %I:%M %p', this.x)}<br/>PM2.5 µg/m³ - ${getAQICategoryFromPM25(this.y)} <b>${this.y}</b>`;
+            return `${Highcharts.dateFormat(interval == 'hourly' ? '%d %b, %I:%M %p' : '%a, %d %B', this.x)}<br/>PM2.5 µg/m³ - ${getAQICategoryFromPM25(this.y)} <b>${this.y}</b>`;
           }
         },
       },
       series: [
         {
           colorByPoint: true,
-          animation: false,
+          animation: {
+            duration: 1000,
+            // Uses simple function
+            easing: 'easeOutBounce',
+          },
           data: airQualityList.map((data) => {
             let dataY;
             if (pollutionType === 'aqi') {
@@ -192,6 +202,15 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
       ],
     }));
   }, [airQualityList, pollutionType]);
+
+  useEffect(() => {
+    // Clear the chart data
+    setChartOptions((prevOptions) => ({
+      ...prevOptions,
+      series: [],
+    }));
+  }, [interval]);
+
   return <HighchartsReact highcharts={Highcharts} options={chartOptions} />;
 };
 

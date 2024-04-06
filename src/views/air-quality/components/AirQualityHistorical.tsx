@@ -48,7 +48,7 @@ const AirQualityHistorical: React.FC<AirQualityHistoricalProps> = ({
   location,
 }) => {
   const [airQuality, setAirQuality] = useState<AirQuality[]>([]);
-  const [interval, setInterval] = useState('hourly');
+  const [interval, setInterval] = useState<'hourly' | 'daily'>('hourly');
   const [pollutionType, setPollutionType] = useState('aqi');
 
   const onIntervalRadioChange = (e: RadioChangeEvent) => {
@@ -96,6 +96,7 @@ const AirQualityHistorical: React.FC<AirQualityHistoricalProps> = ({
           <AirQualityHistoricalChart
             airQualityList={airQuality}
             pollutionType={pollutionType}
+            interval={interval}
           />
         </ChartWrapper>
         <Flex
