@@ -34,12 +34,6 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
     },
     xAxis: {
       type: 'datetime',
-      labels: {
-        format:
-          interval === 'hourly'
-            ? '{value:%d %b, %I:%M %p}'
-            : '{value: %a, %d %B}',
-      },
       gridLineWidth: 1,
       gridLineColor: '#fff',
       lineColor: '#ccd6eb',
@@ -95,6 +89,12 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
         ...prevOptions.xAxis,
         tickInterval:
           interval === 'hourly' ? 1000 * 3600 * 10 : 1000 * 3600 * 24 * 5,
+        labels: {
+          format:
+            interval === 'hourly'
+              ? '{value:%d %b, %I:%M %p}'
+              : '{value: %a, %d %B}',
+        },
       },
       yAxis: {
         ...prevOptions.yAxis,
@@ -127,13 +127,15 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
             return {
               y: dataY,
               x:
-                new Date(data.lastUpdate).getTime() -
-                new Date(data.lastUpdate).getTimezoneOffset() * 60 * 1000,
+                interval === 'hourly'
+                  ? new Date(data.lastUpdate).getTime() -
+                    new Date(data.lastUpdate).getTimezoneOffset() * 60 * 1000
+                  : new Date(data.lastUpdate).getTime(),
             };
           }),
           zones: [
             {
-              value: getAQIBoundary(AQICategory.GOOD, pollutionType)[1],
+              value: getAQIBoundary(AQICategory.GOOD, pollutionType)[1] + 0.1,
               color: {
                 linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
                 stops: [
@@ -143,7 +145,8 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
               },
             },
             {
-              value: getAQIBoundary(AQICategory.MODERATE, pollutionType)[1],
+              value:
+                getAQIBoundary(AQICategory.MODERATE, pollutionType)[1] + 0.1,
               color: {
                 linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
                 stops: [
@@ -153,10 +156,11 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
               },
             },
             {
-              value: getAQIBoundary(
-                AQICategory.UNHEALTHY_FOR_SENSITIVE_GROUPS,
-                pollutionType,
-              )[1],
+              value:
+                getAQIBoundary(
+                  AQICategory.UNHEALTHY_FOR_SENSITIVE_GROUPS,
+                  pollutionType,
+                )[1] + 0.1,
               color: {
                 linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
                 stops: [
@@ -166,7 +170,8 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
               },
             },
             {
-              value: getAQIBoundary(AQICategory.UNHEALTHY, pollutionType)[1],
+              value:
+                getAQIBoundary(AQICategory.UNHEALTHY, pollutionType)[1] + 0.1,
               color: {
                 linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
                 stops: [
@@ -176,10 +181,9 @@ const AirQualityHistoricalChart: React.FC<AirQualityHistoricalChartProps> = ({
               },
             },
             {
-              value: getAQIBoundary(
-                AQICategory.VERY_UNHEALTHY,
-                pollutionType,
-              )[1],
+              value:
+                getAQIBoundary(AQICategory.VERY_UNHEALTHY, pollutionType)[1] +
+                0.1,
               color: {
                 linearGradient: { x1: 0, x2: 0, y1: 0, y2: 1 },
                 stops: [
