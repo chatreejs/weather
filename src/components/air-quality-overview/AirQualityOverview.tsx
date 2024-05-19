@@ -4,10 +4,10 @@ import styled from 'styled-components';
 
 import { SectionTitle } from '@components';
 import { AirQuality } from '@models';
-import AQIBanner from './AQIBanner';
-import MainPollutionTable from './MainPollutionTable';
-import OtherPollutionTable from './OtherPollutionTable';
-import WHOGuideline from './WHOGuideline';
+import AQIBanner from './components/AQIBanner';
+import MainPollutionTable from './components/MainPollutionTable';
+import OtherPollutionTable from './components/OtherPollutionTable';
+import WHOGuideline from './components/WHOGuideline';
 
 const OverviewWrapper = styled.div`
   width: 100%;
@@ -56,13 +56,13 @@ interface AirQualityOverviewProps {
 const AirQualityOverview: React.FC<AirQualityOverviewProps> = ({
   airQuality,
 }) => {
-  const [showWHO, setShowWHO] = useState<boolean>(false);
+  const [showWHOGuideline, setShowWHOGuideline] = useState<boolean>(false);
 
   useEffect(() => {
     if (airQuality.pm25 > 5) {
-      setShowWHO(true);
+      setShowWHOGuideline(true);
     } else {
-      setShowWHO(false);
+      setShowWHOGuideline(false);
     }
   }, []);
 
@@ -77,7 +77,7 @@ const AirQualityOverview: React.FC<AirQualityOverviewProps> = ({
           </h2>
           <MainPollutionTable aqi={airQuality.aqi} />
           <OtherPollutionTable airQuality={airQuality} />
-          {showWHO && <WHOGuideline airQuality={airQuality} />}
+          {showWHOGuideline && <WHOGuideline airQuality={airQuality} />}
           {/* <SectionTitle title="Health Recommendations" /> */}
         </OverviewDetails>
       </Card>

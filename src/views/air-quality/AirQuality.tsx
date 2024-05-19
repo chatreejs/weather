@@ -1,12 +1,12 @@
+import { Skeleton } from 'antd';
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
+import { AirQualityOverview } from '@components';
 import { AirQuality as AirQualityModel } from '@models';
 import { AirQualityService } from '@services';
-import { Skeleton } from 'antd';
 import AirQualityHeader from './components/AirQualityHeader';
 import AirQualityHistorical from './components/AirQualityHistorical';
-import AirQualityOverview from './components/AirQualityOverview';
 
 const Container = styled.div`
   margin-right: auto;
