@@ -66,8 +66,10 @@ const AirQualityRealtime: React.FC = () => {
     airQualityStompClient.onConnect = () => {
       airQualityStompClient.subscribe('/topic/air-quality', (message) => {
         const airQualityRealtime: AirQuality = JSON.parse(message.body);
-        airQualityRealtime.location = airQuality.location;
-        setAirQuality(airQualityRealtime);
+        setAirQuality({
+          ...airQuality,
+          ...airQualityRealtime,
+        });
       });
     };
     airQualityStompClient.activate();
