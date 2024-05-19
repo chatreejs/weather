@@ -104,7 +104,7 @@ const WHOGuideline: React.FC<WHOGuidelineProps> = ({ airQuality }) => {
       default:
         break;
     }
-  }, []);
+  }, [airQuality]);
 
   return (
     <WHOGuidelineWrapper>

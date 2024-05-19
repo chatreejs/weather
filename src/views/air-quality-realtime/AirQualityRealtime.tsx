@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { AirQualityHeader, AirQualityOverview } from '@components';
-import { AirQuality as AirQualityModel } from '@models';
+import { AirQuality, AirQuality as AirQualityModel } from '@models';
 import { AirQualityService } from '@services';
-import AirQualityHistorical from './components/AirQualityHistorical';
+import { Client } from '@stomp/stompjs';
 
 const Container = styled.div`
   margin-right: auto;
@@ -40,7 +40,7 @@ const ContentWrapper = styled(Container)`
   border-bottom: 1px solid #e6e6e6;
 `;
 
-const AirQuality: React.FC = () => {
+const AirQualityRealtime: React.FC = () => {
   const [airQuality, setAirQuality] = useState<AirQualityModel>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -58,6 +58,28 @@ const AirQuality: React.FC = () => {
     });
   }, []);
 
+  useEffect(() => {
+    const airQualityStompClient = new Client({
+      brokerURL: process.env.VITE_APP_BASE_SOCKET,
+      reconnectDelay: 5000,
+    });
+    airQualityStompClient.onConnect = () => {
+      airQualityStompClient.subscribe('/topic/air-quality', (message) => {
+        const airQualityRealtime: AirQuality = JSON.parse(message.body);
+        airQualityRealtime.location = airQuality.location;
+        setAirQuality(airQualityRealtime);
+      });
+    };
+    airQualityStompClient.activate();
+
+    // Clean up
+    return () => {
+      if (airQualityStompClient.connected) {
+        airQualityStompClient.deactivate();
+      }
+    };
+  }, []);
+
   return (
     <>
       <HeaderContainer>
@@ -72,10 +94,9 @@ const AirQuality: React.FC = () => {
       <ContentWrapper>
         {isLoading && <Skeleton active />}
         {!isLoading && <AirQualityOverview airQuality={airQuality} />}
-        {!isLoading && <AirQualityHistorical location={airQuality.location} />}
       </ContentWrapper>
     </>
   );
 };
 
-export default AirQuality;
+export default AirQualityRealtime;
