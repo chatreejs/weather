@@ -45,7 +45,7 @@ const AirQualityRealtime: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    AirQualityService.getCurrentAirQuality().subscribe({
+    AirQualityService.getRealtimeAirQuality().subscribe({
       next: (airQuality) => {
         airQuality.location = 'Aspire Asoke-Ratchada, Bangkok';
         setAirQuality(airQuality);
