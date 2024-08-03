@@ -52,12 +52,16 @@ const TimestampWrapper = styled.p`
 interface AirQualityHeaderProps {
   location: string;
   lastUpdate: string;
+  showSecond?: boolean;
 }
 
 const AirQualityHeader: React.FC<AirQualityHeaderProps> = ({
   location,
   lastUpdate,
+  showSecond,
 }) => {
+  const format = showSecond ? 'HH:mm:ss' : 'HH:mm';
+
   return (
     <>
       <Title>Air quality near {location}</Title>
@@ -68,7 +72,7 @@ const AirQualityHeader: React.FC<AirQualityHeaderProps> = ({
         <span>Last Update at</span>
         <time dateTime={lastUpdate}>
           {' '}
-          {dayjs(lastUpdate).format('HH:mm, MMM YY')}
+          {dayjs(lastUpdate).format(format)}
           {' (local time)'}
         </time>
       </TimestampWrapper>

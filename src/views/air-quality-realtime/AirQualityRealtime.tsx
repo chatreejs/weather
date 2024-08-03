@@ -43,11 +43,12 @@ const ContentWrapper = styled(Container)`
 const AirQualityRealtime: React.FC = () => {
   const [airQuality, setAirQuality] = useState<AirQualityModel>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const location = 'Aspire Asoke-Ratchada, Bangkok';
 
   useEffect(() => {
     AirQualityService.getRealtimeAirQuality().subscribe({
       next: (airQuality) => {
-        airQuality.location = 'Aspire Asoke-Ratchada, Bangkok';
+        airQuality.location = location;
         setAirQuality(airQuality);
         setIsLoading(false);
       },
@@ -67,8 +68,8 @@ const AirQualityRealtime: React.FC = () => {
       airQualityStompClient.subscribe('/topic/air-quality', (message) => {
         const airQualityRealtime: AirQuality = JSON.parse(message.body);
         setAirQuality({
-          ...airQuality,
           ...airQualityRealtime,
+          location: location,
         });
       });
     };
@@ -90,6 +91,7 @@ const AirQualityRealtime: React.FC = () => {
           <AirQualityHeader
             location={airQuality.location}
             lastUpdate={airQuality.lastUpdate}
+            showSecond={true}
           />
         )}
       </HeaderContainer>
