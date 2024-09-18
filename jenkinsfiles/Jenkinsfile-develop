@@ -5,7 +5,6 @@ pipeline {
     VERSION = "0.1.0"
     IMAGE_URL = "registry.chatree.dev/weather/web"
     BUILD_PROFILE = 'develop'
-    DESTINATION_SERVER = "10.13.21.1"
   }
 
   stages {
