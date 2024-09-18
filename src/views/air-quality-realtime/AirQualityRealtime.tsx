@@ -1,5 +1,5 @@
 import { Skeleton } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { AirQualityHeader, AirQualityOverview } from '@components';
@@ -45,7 +45,7 @@ const AirQualityRealtime: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const location = 'Aspire Asoke-Ratchada, Bangkok';
 
-  useEffect(() => {
+  const fetchAirQualityData = useCallback(() => {
     AirQualityService.getRealtimeAirQuality().subscribe({
       next: (airQuality) => {
         airQuality.location = location;
@@ -57,31 +57,44 @@ const AirQualityRealtime: React.FC = () => {
         setIsLoading(false);
       },
     });
-  }, []);
+  }, [location]);
 
-  useEffect(() => {
+  const handleAirQualityMessage = (message) => {
+    const body: AirQuality = JSON.parse(message.body);
+    setAirQuality({
+      location: location,
+      ...body,
+    });
+  };
+
+  const setupStompClient = useCallback(() => {
     const airQualityStompClient = new Client({
       brokerURL: process.env.VITE_APP_BASE_SOCKET,
       reconnectDelay: 5000,
     });
+
     airQualityStompClient.onConnect = () => {
-      airQualityStompClient.subscribe('/topic/air-quality', (message) => {
-        const airQualityRealtime: AirQuality = JSON.parse(message.body);
-        setAirQuality({
-          ...airQualityRealtime,
-          location: location,
-        });
-      });
+      airQualityStompClient.subscribe(
+        '/topic/air-quality',
+        handleAirQualityMessage,
+      );
     };
+
     airQualityStompClient.activate();
 
-    // Clean up
     return () => {
-      if (airQualityStompClient.connected) {
-        airQualityStompClient.deactivate();
-      }
+      airQualityStompClient.deactivate();
     };
   }, []);
+
+  useEffect(() => {
+    fetchAirQualityData();
+  }, [fetchAirQualityData]);
+
+  useEffect(() => {
+    const stompClient = setupStompClient();
+    return stompClient;
+  }, [setupStompClient]);
 
   return (
     <>

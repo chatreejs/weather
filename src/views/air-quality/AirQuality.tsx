@@ -1,5 +1,5 @@
 import { Skeleton } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { AirQualityHeader, AirQualityOverview } from '@components';
@@ -44,7 +44,7 @@ const AirQuality: React.FC = () => {
   const [airQuality, setAirQuality] = useState<AirQualityModel>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
-  useEffect(() => {
+  const fetchAirQuality = useCallback(() => {
     AirQualityService.getCurrentAirQuality().subscribe({
       next: (airQuality) => {
         airQuality.location = 'Aspire Asoke-Ratchada, Bangkok';
@@ -57,6 +57,10 @@ const AirQuality: React.FC = () => {
       },
     });
   }, []);
+
+  useEffect(() => {
+    fetchAirQuality();
+  }, [fetchAirQuality]);
 
   return (
     <>

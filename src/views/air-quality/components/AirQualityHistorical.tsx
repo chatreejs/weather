@@ -1,5 +1,5 @@
 import { Card, Flex, Radio, RadioChangeEvent } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { SectionTitle } from '@components';
@@ -60,7 +60,7 @@ const AirQualityHistorical: React.FC<AirQualityHistoricalProps> = ({
     setPollutionType(e.target.value);
   };
 
-  useEffect(() => {
+  const fetchAirQualityHistory = useCallback(() => {
     AirQualityService.getAirQualityHistory(interval).subscribe({
       next: (airQuality) => {
         setAirQuality(airQuality);
@@ -70,6 +70,10 @@ const AirQualityHistorical: React.FC<AirQualityHistoricalProps> = ({
       },
     });
   }, [interval]);
+
+  useEffect(() => {
+    fetchAirQualityHistory();
+  }, [fetchAirQualityHistory]);
 
   return (
     <HistoricalWrapper>
