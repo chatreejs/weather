@@ -47,6 +47,9 @@ pipeline {
 
     stage('Build Docker Image') {
       steps {
+        script {
+          currentBuild.displayName += " version ${BUILD_VERSION}"
+        }
         sh 'docker build --build-arg BUILD_CONFIGURATION=${BUILD_PROFILE} -f Dockerfile . -t ${IMAGE_URL}:${BUILD_VERSION}'
       }
     }
@@ -89,7 +92,7 @@ pipeline {
 
     stage('Deploy to Kubernetes') {
       steps {
-        build job: 'chatreejs/GitOps/weather-manifest-dev', parameters: [string(name: 'IMAGE_TAG', value: "${IMAGE_URL}:${BUILD_VERSION}")]
+        build job: 'Chatree.js/Develop/GitOps/weather-manifest-dev', parameters: [string(name: 'WEB_IMAGE_TAG', value: "${IMAGE_URL}:${BUILD_VERSION}")]
       }
     }
 
