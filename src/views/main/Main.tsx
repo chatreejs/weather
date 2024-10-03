@@ -11,7 +11,7 @@ import {
   RightSide,
   WeatherSummary,
 } from '@components';
-import { AirQuality, Weather } from '@models';
+import { AirQuality, WeatherSensor } from '@models';
 import { AirQualityService } from '@services';
 
 const Container = styled.div`
@@ -49,7 +49,7 @@ const ContentWrapper = styled(Container)`
 
 const Main: React.FC = () => {
   const [airQuality, setAirQuality] = useState<AirQuality>(null);
-  const [weather, setWeather] = useState<Weather>({
+  const [weatherSensor, setWeatherSensor] = useState<WeatherSensor>({
     temperature: 25,
     humidity: 61,
     pressure: 1100,
@@ -57,7 +57,7 @@ const Main: React.FC = () => {
     source: 'mock',
     location: 'Aspire Asoke-Ratchada, Bangkok',
   });
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isAirQualityLoading, setIsAirQualityLoading] = useState<boolean>(true);
   const [isMobile] = useState<boolean>(window.innerWidth < 960);
 
   const fetchAirQuality = useCallback(() => {
@@ -65,11 +65,11 @@ const Main: React.FC = () => {
       next: (airQuality) => {
         airQuality.location = 'Aspire Asoke-Ratchada, Bangkok';
         setAirQuality(airQuality);
-        setIsLoading(false);
+        setIsAirQualityLoading(false);
       },
       error: (error) => {
         console.error('Error while fetching air quality data', error);
-        setIsLoading(false);
+        setIsAirQualityLoading(false);
       },
     });
   }, []);
@@ -94,8 +94,8 @@ const Main: React.FC = () => {
   return (
     <>
       <HeaderContainer>
-        {isLoading && <Skeleton active />}
-        {!isLoading && (
+        {isAirQualityLoading && <Skeleton active />}
+        {!isAirQualityLoading && (
           <AirQualityHeader
             location={airQuality.location}
             lastUpdate={airQuality.lastUpdate}
@@ -104,8 +104,8 @@ const Main: React.FC = () => {
       </HeaderContainer>
       {!isMobile && (
         <ContentWrapper>
-          {isLoading && <Skeleton active />}
-          {!isLoading && (
+          {isAirQualityLoading && <Skeleton active />}
+          {!isAirQualityLoading && (
             <>
               <LeftSide>
                 <ContributorSource
@@ -113,7 +113,7 @@ const Main: React.FC = () => {
                   profileImageUrl="https://avatars.githubusercontent.com/u/36321701?v=4"
                   contributorType="Individual"
                 />
-                <WeatherSummary weather={weather} />
+                <WeatherSummary weatherSensor={weatherSensor} />
               </LeftSide>
               <RightSide>
                 <AirQualityOverview airQuality={airQuality} />
@@ -125,8 +125,8 @@ const Main: React.FC = () => {
       )}
       {isMobile && (
         <Container>
-          {isLoading && <Skeleton active />}
-          {!isLoading && (
+          {isAirQualityLoading && <Skeleton active />}
+          {!isAirQualityLoading && (
             <>
               <AirQualityOverview airQuality={airQuality} />
               <ContributorSource
@@ -134,6 +134,7 @@ const Main: React.FC = () => {
                 profileImageUrl="https://avatars.githubusercontent.com/u/36321701?v=4"
                 contributorType="Individual"
               />
+              <WeatherSummary weatherSensor={weatherSensor} />
               <AirQualityHistorical location={airQuality.location} />
             </>
           )}

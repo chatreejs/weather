@@ -1,3 +1,4 @@
+import { Client } from '@stomp/stompjs';
 import { Skeleton } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
@@ -8,10 +9,10 @@ import {
   ContributorSource,
   LeftSide,
   RightSide,
+  WeatherSummary,
 } from '@components';
-import { AirQuality, AirQuality as AirQualityModel } from '@models';
+import { AirQuality, WeatherSensor } from '@models';
 import { AirQualityService } from '@services';
-import { Client } from '@stomp/stompjs';
 
 const Container = styled.div`
   width: 100%;
@@ -46,8 +47,9 @@ const ContentWrapper = styled(Container)`
 `;
 
 const Realtime: React.FC = () => {
-  const [airQuality, setAirQuality] = useState<AirQualityModel>(null);
-  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [airQuality, setAirQuality] = useState<AirQuality>(null);
+  const [weatherSensor, setWeatherSensor] = useState<WeatherSensor>(null);
+  const [isAirQualityLoading, setIsAirQualityLoading] = useState<boolean>(true);
   const [isMobile] = useState<boolean>(window.innerWidth < 960);
   const location = 'Aspire Asoke-Ratchada, Bangkok';
 
@@ -56,14 +58,22 @@ const Realtime: React.FC = () => {
       next: (airQuality) => {
         airQuality.location = location;
         setAirQuality(airQuality);
-        setIsLoading(false);
+        setIsAirQualityLoading(false);
       },
       error: (error) => {
         console.error('Error while fetching air quality data', error);
-        setIsLoading(false);
+        setIsAirQualityLoading(false);
       },
     });
   }, [location]);
+
+  const handleWeatherSensorMessage = (message) => {
+    const body: WeatherSensor = JSON.parse(message.body);
+    setWeatherSensor({
+      location: location,
+      ...body,
+    });
+  };
 
   const handleAirQualityMessage = (message) => {
     const body: AirQuality = JSON.parse(message.body);
@@ -74,22 +84,26 @@ const Realtime: React.FC = () => {
   };
 
   const setupStompClient = useCallback(() => {
-    const airQualityStompClient = new Client({
+    const weatherStompClient = new Client({
       brokerURL: process.env.VITE_APP_BASE_SOCKET,
       reconnectDelay: 5000,
     });
 
-    airQualityStompClient.onConnect = () => {
-      airQualityStompClient.subscribe(
+    weatherStompClient.onConnect = () => {
+      weatherStompClient.subscribe(
+        '/topic/weather-sensor',
+        handleWeatherSensorMessage,
+      );
+      weatherStompClient.subscribe(
         '/topic/air-quality',
         handleAirQualityMessage,
       );
     };
 
-    airQualityStompClient.activate();
+    weatherStompClient.activate();
 
     return () => {
-      airQualityStompClient.deactivate();
+      weatherStompClient.deactivate();
     };
   }, []);
 
@@ -105,8 +119,8 @@ const Realtime: React.FC = () => {
   return (
     <>
       <HeaderContainer>
-        {isLoading && <Skeleton active />}
-        {!isLoading && (
+        {isAirQualityLoading && <Skeleton active />}
+        {!isAirQualityLoading && (
           <AirQualityHeader
             location={airQuality.location}
             lastUpdate={airQuality.lastUpdate}
@@ -117,8 +131,8 @@ const Realtime: React.FC = () => {
       </HeaderContainer>
       {!isMobile && (
         <ContentWrapper>
-          {isLoading && <Skeleton active />}
-          {!isLoading && (
+          {isAirQualityLoading && <Skeleton active />}
+          {!isAirQualityLoading && (
             <>
               <LeftSide>
                 <ContributorSource
@@ -126,6 +140,7 @@ const Realtime: React.FC = () => {
                   profileImageUrl="https://avatars.githubusercontent.com/u/36321701?v=4"
                   contributorType="Individual"
                 />
+                <WeatherSummary weatherSensor={weatherSensor} />
               </LeftSide>
               <RightSide>
                 <AirQualityOverview airQuality={airQuality} />
@@ -136,8 +151,8 @@ const Realtime: React.FC = () => {
       )}
       {isMobile && (
         <Container>
-          {isLoading && <Skeleton active />}
-          {!isLoading && (
+          {isAirQualityLoading && <Skeleton active />}
+          {!isAirQualityLoading && (
             <>
               <AirQualityOverview airQuality={airQuality} />
               <ContributorSource
@@ -145,6 +160,7 @@ const Realtime: React.FC = () => {
                 profileImageUrl="https://avatars.githubusercontent.com/u/36321701?v=4"
                 contributorType="Individual"
               />
+              <WeatherSummary weatherSensor={weatherSensor} />
             </>
           )}
         </Container>

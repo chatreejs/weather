@@ -1,4 +1,4 @@
-export interface Weather {
+export interface WeatherSensor {
   temperature: number;
   humidity: number;
   pressure: number;

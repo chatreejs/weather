@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { SectionTitle } from '@components';
-import { Weather } from '@models';
+import { WeatherSensor } from '@models';
 import NightRainFullImage from '../../assets/images/ic-w-12-night-rain-full.svg';
 
 const WeatherWrapper = styled.div`
@@ -74,10 +74,10 @@ const WeatherImage = styled.img`
 `;
 
 interface WeatherSummaryProps {
-  weather: Weather;
+  weatherSensor: WeatherSensor;
 }
 
-const WeatherSummary: React.FC<WeatherSummaryProps> = ({ weather }) => {
+const WeatherSummary: React.FC<WeatherSummaryProps> = ({ weatherSensor }) => {
   return (
     <WeatherWrapper>
       <Card bordered={false}>
@@ -92,7 +92,7 @@ const WeatherSummary: React.FC<WeatherSummaryProps> = ({ weather }) => {
                 fontWeight: 500,
               }}
             >
-              What is the current weather in {weather?.location}?
+              What is the current weather in {weatherSensor?.location}?
             </h2>
           </div>
           <WeatherImage src={NightRainFullImage} />
@@ -102,15 +102,15 @@ const WeatherSummary: React.FC<WeatherSummaryProps> = ({ weather }) => {
             <tbody>
               <tr>
                 <td>Temperature</td>
-                <td>{weather?.temperature}°C</td>
+                <td>{weatherSensor?.temperature.toFixed(2)}°C</td>
               </tr>
               <tr>
                 <td>Humidity</td>
-                <td>{weather?.humidity}%</td>
+                <td>{weatherSensor?.humidity.toFixed(2)}%</td>
               </tr>
               <tr>
                 <td>Pressure</td>
-                <td>{weather?.pressure} hPa</td>
+                <td>{weatherSensor?.pressure.toFixed(2)} hPa</td>
               </tr>
             </tbody>
           </table>
