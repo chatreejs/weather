@@ -1,3 +1,4 @@
+import { Tag } from 'antd';
 import dayjs from 'dayjs';
 import React from 'react';
 import styled from 'styled-components';
@@ -53,14 +54,16 @@ interface AirQualityHeaderProps {
   location: string;
   lastUpdate: string;
   showSecond?: boolean;
+  realTime?: boolean;
 }
 
 const AirQualityHeader: React.FC<AirQualityHeaderProps> = ({
   location,
   lastUpdate,
   showSecond,
+  realTime,
 }) => {
-  const format = showSecond ? 'HH:mm:ss' : 'HH:mm';
+  const format = showSecond ? 'HH:mm:ss, MMM D' : 'HH:mm, MMM D';
 
   return (
     <>
@@ -70,11 +73,12 @@ const AirQualityHeader: React.FC<AirQualityHeaderProps> = ({
       </Subtitle>
       <TimestampWrapper>
         <span>Last Update at</span>
-        <time dateTime={lastUpdate}>
-          {' '}
-          {dayjs(lastUpdate).format(format)}
-          {' (local time)'}
-        </time>
+        <time dateTime={lastUpdate}> {dayjs(lastUpdate).format(format)}</time>
+        {realTime && (
+          <Tag color="purple" style={{ marginLeft: 6 }}>
+            REALTIME DATA
+          </Tag>
+        )}
       </TimestampWrapper>
     </>
   );

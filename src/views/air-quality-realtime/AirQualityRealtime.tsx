@@ -37,7 +37,6 @@ const ContentWrapper = styled(Container)`
   flex-direction: column;
   justify-content: space-between;
   padding-bottom: 72px;
-  border-bottom: 1px solid #e6e6e6;
 `;
 
 const AirQualityRealtime: React.FC = () => {
@@ -105,6 +104,7 @@ const AirQualityRealtime: React.FC = () => {
             location={airQuality.location}
             lastUpdate={airQuality.lastUpdate}
             showSecond={true}
+            realTime={true}
           />
         )}
       </HeaderContainer>

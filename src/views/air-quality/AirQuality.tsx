@@ -1,8 +1,12 @@
-import { Skeleton } from 'antd';
+import { Flex, Skeleton } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { AirQualityHeader, AirQualityOverview } from '@components';
+import {
+  AirQualityHeader,
+  AirQualityOverview,
+  ContributorSource,
+} from '@components';
 import { AirQuality as AirQualityModel } from '@models';
 import { AirQualityService } from '@services';
 import AirQualityHistorical from './components/AirQualityHistorical';
@@ -75,8 +79,21 @@ const AirQuality: React.FC = () => {
       </HeaderContainer>
       <ContentWrapper>
         {isLoading && <Skeleton active />}
-        {!isLoading && <AirQualityOverview airQuality={airQuality} />}
-        {!isLoading && <AirQualityHistorical location={airQuality.location} />}
+        {!isLoading && (
+          <Flex gap={24}>
+            <div style={{ width: 364 }}>
+              <ContributorSource
+                contributorName="Chatree.dev"
+                profileImageUrl="https://avatars.githubusercontent.com/u/36321701?v=4"
+                contributorType="Individual"
+              />
+            </div>
+            <div>
+              <AirQualityOverview airQuality={airQuality} />
+              <AirQualityHistorical location={airQuality.location} />
+            </div>
+          </Flex>
+        )}
       </ContentWrapper>
     </>
   );
