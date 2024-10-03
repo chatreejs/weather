@@ -7,9 +7,11 @@ import {
   AirQualityHistorical,
   AirQualityOverview,
   ContributorSource,
+  LeftSide,
+  RightSide,
   WeatherSummary,
 } from '@components';
-import { AirQuality as AirQualityModel, Weather } from '@models';
+import { AirQuality, Weather } from '@models';
 import { AirQualityService } from '@services';
 
 const Container = styled.div`
@@ -45,18 +47,8 @@ const ContentWrapper = styled(Container)`
   border-bottom: 1px solid #e6e6e6;
 `;
 
-const LeftSide = styled.div`
-  width: 364px;
-  margin-right: 24px;
-`;
-
-const RightSide = styled.div`
-  flex: 1 0 auto;
-  max-width: calc(100% - 388px);
-`;
-
-const AirQuality: React.FC = () => {
-  const [airQuality, setAirQuality] = useState<AirQualityModel>(null);
+const Main: React.FC = () => {
+  const [airQuality, setAirQuality] = useState<AirQuality>(null);
   const [weather, setWeather] = useState<Weather>({
     temperature: 25,
     humidity: 61,
@@ -151,4 +143,4 @@ const AirQuality: React.FC = () => {
   );
 };
 
-export default AirQuality;
+export default Main;

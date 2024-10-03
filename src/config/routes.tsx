@@ -1,13 +1,13 @@
 import { Navigate, Route, Routes } from 'react-router-dom';
 
-import { AirQuality, AirQualityRealtime } from '@views';
+import { Main, Realtime } from '@views';
 
 const AppRoutes: React.FC = () => {
   return (
     <Routes>
-      <Route path="/air-quality" element={<AirQuality />} />
-      <Route path="/air-quality-realtime" element={<AirQualityRealtime />} />
-      <Route path="*" element={<Navigate to="/air-quality" />} />
+      <Route path="/" element={<Main />} />
+      <Route path="/realtime" element={<Realtime />} />
+      <Route path="*" element={<Navigate to="/" />} />
     </Routes>
   );
 };

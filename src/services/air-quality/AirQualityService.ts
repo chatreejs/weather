@@ -4,7 +4,7 @@ import { axiosInstance } from '@config';
 import { AirQuality } from '@models';
 
 export class AirQualityService {
-  private static apiEndpoint = '/air-quality';
+  private static readonly apiEndpoint = '/air-quality';
 
   static getCurrentAirQuality(): Observable<AirQuality> {
     return from(

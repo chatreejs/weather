@@ -6,6 +6,8 @@ import {
   AirQualityHeader,
   AirQualityOverview,
   ContributorSource,
+  LeftSide,
+  RightSide,
 } from '@components';
 import { AirQuality, AirQuality as AirQualityModel } from '@models';
 import { AirQualityService } from '@services';
@@ -43,17 +45,7 @@ const ContentWrapper = styled(Container)`
   padding-bottom: 72px;
 `;
 
-const LeftSide = styled.div`
-  width: 364px;
-  margin-right: 24px;
-`;
-
-const RightSide = styled.div`
-  flex: 1 0 auto;
-  max-width: calc(100% - 388px);
-`;
-
-const AirQualityRealtime: React.FC = () => {
+const Realtime: React.FC = () => {
   const [airQuality, setAirQuality] = useState<AirQualityModel>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isMobile] = useState<boolean>(window.innerWidth < 960);
@@ -161,4 +153,4 @@ const AirQualityRealtime: React.FC = () => {
   );
 };
 
-export default AirQualityRealtime;
+export default Realtime;
