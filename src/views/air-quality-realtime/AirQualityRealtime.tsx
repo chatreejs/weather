@@ -2,12 +2,17 @@ import { Skeleton } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { AirQualityHeader, AirQualityOverview } from '@components';
+import {
+  AirQualityHeader,
+  AirQualityOverview,
+  ContributorSource,
+} from '@components';
 import { AirQuality, AirQuality as AirQualityModel } from '@models';
 import { AirQualityService } from '@services';
 import { Client } from '@stomp/stompjs';
 
 const Container = styled.div`
+  width: 100%;
   margin-right: auto;
   margin-left: auto;
   padding-right: 18px;
@@ -34,14 +39,24 @@ const HeaderContainer = styled(Container)`
 
 const ContentWrapper = styled(Container)`
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
   padding-bottom: 72px;
+`;
+
+const LeftSide = styled.div`
+  width: 364px;
+  margin-right: 24px;
+`;
+
+const RightSide = styled.div`
+  flex: 1 0 auto;
+  max-width: calc(100% - 388px);
 `;
 
 const AirQualityRealtime: React.FC = () => {
   const [airQuality, setAirQuality] = useState<AirQualityModel>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isMobile] = useState<boolean>(window.innerWidth < 960);
   const location = 'Aspire Asoke-Ratchada, Bangkok';
 
   const fetchAirQualityData = useCallback(() => {
@@ -108,10 +123,40 @@ const AirQualityRealtime: React.FC = () => {
           />
         )}
       </HeaderContainer>
-      <ContentWrapper>
-        {isLoading && <Skeleton active />}
-        {!isLoading && <AirQualityOverview airQuality={airQuality} />}
-      </ContentWrapper>
+      {!isMobile && (
+        <ContentWrapper>
+          {isLoading && <Skeleton active />}
+          {!isLoading && (
+            <>
+              <LeftSide>
+                <ContributorSource
+                  contributorName="Chatree.dev"
+                  profileImageUrl="https://avatars.githubusercontent.com/u/36321701?v=4"
+                  contributorType="Individual"
+                />
+              </LeftSide>
+              <RightSide>
+                <AirQualityOverview airQuality={airQuality} />
+              </RightSide>
+            </>
+          )}
+        </ContentWrapper>
+      )}
+      {isMobile && (
+        <Container>
+          {isLoading && <Skeleton active />}
+          {!isLoading && (
+            <>
+              <AirQualityOverview airQuality={airQuality} />
+              <ContributorSource
+                contributorName="Chatree.dev"
+                profileImageUrl="https://avatars.githubusercontent.com/u/36321701?v=4"
+                contributorType="Individual"
+              />
+            </>
+          )}
+        </Container>
+      )}
     </>
   );
 };

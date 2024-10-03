@@ -1,4 +1,4 @@
-import { Flex, Skeleton } from 'antd';
+import { Skeleton } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
@@ -12,6 +12,7 @@ import { AirQualityService } from '@services';
 import AirQualityHistorical from './components/AirQualityHistorical';
 
 const Container = styled.div`
+  width: 100%;
   margin-right: auto;
   margin-left: auto;
   padding-right: 18px;
@@ -38,15 +39,25 @@ const HeaderContainer = styled(Container)`
 
 const ContentWrapper = styled(Container)`
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
   padding-bottom: 72px;
   border-bottom: 1px solid #e6e6e6;
 `;
 
+const LeftSide = styled.div`
+  width: 364px;
+  margin-right: 24px;
+`;
+
+const RightSide = styled.div`
+  flex: 1 0 auto;
+  max-width: calc(100% - 388px);
+`;
+
 const AirQuality: React.FC = () => {
   const [airQuality, setAirQuality] = useState<AirQualityModel>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [isMobile] = useState<boolean>(window.innerWidth < 960);
 
   const fetchAirQuality = useCallback(() => {
     AirQualityService.getCurrentAirQuality().subscribe({
@@ -77,24 +88,42 @@ const AirQuality: React.FC = () => {
           />
         )}
       </HeaderContainer>
-      <ContentWrapper>
-        {isLoading && <Skeleton active />}
-        {!isLoading && (
-          <Flex gap={24}>
-            <div style={{ width: 364 }}>
+      {!isMobile && (
+        <ContentWrapper>
+          {isLoading && <Skeleton active />}
+          {!isLoading && (
+            <>
+              <LeftSide>
+                <ContributorSource
+                  contributorName="Chatree.dev"
+                  profileImageUrl="https://avatars.githubusercontent.com/u/36321701?v=4"
+                  contributorType="Individual"
+                />
+              </LeftSide>
+              <RightSide>
+                <AirQualityOverview airQuality={airQuality} />
+                <AirQualityHistorical location={airQuality.location} />
+              </RightSide>
+            </>
+          )}
+        </ContentWrapper>
+      )}
+      {isMobile && (
+        <Container>
+          {isLoading && <Skeleton active />}
+          {!isLoading && (
+            <>
+              <AirQualityOverview airQuality={airQuality} />
               <ContributorSource
                 contributorName="Chatree.dev"
                 profileImageUrl="https://avatars.githubusercontent.com/u/36321701?v=4"
                 contributorType="Individual"
               />
-            </div>
-            <div>
-              <AirQualityOverview airQuality={airQuality} />
               <AirQualityHistorical location={airQuality.location} />
-            </div>
-          </Flex>
-        )}
-      </ContentWrapper>
+            </>
+          )}
+        </Container>
+      )}
     </>
   );
 };
