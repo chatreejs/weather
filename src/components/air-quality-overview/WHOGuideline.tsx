@@ -4,7 +4,7 @@ import styled from 'styled-components';
 
 import { AQICategory } from '@enums';
 import { AirQuality } from '@models';
-import { getAQICategoryFromPM25 } from '../../../utils/aqi.util';
+import { getAQICategoryFromPM25 } from '../../utils/aqi.util';
 
 const WHOGuidelineWrapper = styled.div`
   margin-top: 32px;

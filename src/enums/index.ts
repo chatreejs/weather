@@ -1,1 +1,1 @@
-export * from './AQICategory.enum';
+export * from './AQICategory';

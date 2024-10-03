@@ -1,1 +1,2 @@
-export * from './air-quality/AirQuality.model';
+export * from './air-quality/AirQuality';
+export * from './weather/Weather';

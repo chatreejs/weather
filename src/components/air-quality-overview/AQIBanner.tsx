@@ -3,12 +3,12 @@ import styled from 'styled-components';
 
 import { AQICategory } from '@enums';
 import { getAQICategory } from '@utils';
-import FaceGreenImage from '../../../assets/images/ic-face-green.svg';
-import FaceMaroonImage from '../../../assets/images/ic-face-maroon.svg';
-import FaceOrangeImage from '../../../assets/images/ic-face-orange.svg';
-import FacePurpleImage from '../../../assets/images/ic-face-purple.svg';
-import FaceRedImage from '../../../assets/images/ic-face-red.svg';
-import FaceYellowImage from '../../../assets/images/ic-face-yellow.svg';
+import FaceGreenImage from '../../assets/images/ic-face-green.svg';
+import FaceMaroonImage from '../../assets/images/ic-face-maroon.svg';
+import FaceOrangeImage from '../../assets/images/ic-face-orange.svg';
+import FacePurpleImage from '../../assets/images/ic-face-purple.svg';
+import FaceRedImage from '../../assets/images/ic-face-red.svg';
+import FaceYellowImage from '../../assets/images/ic-face-yellow.svg';
 
 const AQISummary = styled.div`
   display: flex !important;

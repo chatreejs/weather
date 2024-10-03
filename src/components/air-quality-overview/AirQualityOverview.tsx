@@ -4,10 +4,10 @@ import styled from 'styled-components';
 
 import { SectionTitle } from '@components';
 import { AirQuality } from '@models';
-import AQIBanner from './components/AQIBanner';
-import MainPollutionTable from './components/MainPollutionTable';
-import OtherPollutionTable from './components/OtherPollutionTable';
-import WHOGuideline from './components/WHOGuideline';
+import AQIBanner from './AQIBanner';
+import MainPollutionTable from './MainPollutionTable';
+import OtherPollutionTable from './OtherPollutionTable';
+import WHOGuideline from './WHOGuideline';
 
 const OverviewWrapper = styled.div`
   width: 100%;

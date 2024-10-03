@@ -4,12 +4,13 @@ import styled from 'styled-components';
 
 import {
   AirQualityHeader,
+  AirQualityHistorical,
   AirQualityOverview,
   ContributorSource,
+  WeatherSummary,
 } from '@components';
-import { AirQuality as AirQualityModel } from '@models';
+import { AirQuality as AirQualityModel, Weather } from '@models';
 import { AirQualityService } from '@services';
-import AirQualityHistorical from './components/AirQualityHistorical';
 
 const Container = styled.div`
   width: 100%;
@@ -56,6 +57,14 @@ const RightSide = styled.div`
 
 const AirQuality: React.FC = () => {
   const [airQuality, setAirQuality] = useState<AirQualityModel>(null);
+  const [weather, setWeather] = useState<Weather>({
+    temperature: 25,
+    humidity: 61,
+    pressure: 1100,
+    lastUpdate: '',
+    source: 'mock',
+    location: 'Aspire Asoke-Ratchada, Bangkok',
+  });
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isMobile] = useState<boolean>(window.innerWidth < 960);
 
@@ -71,6 +80,19 @@ const AirQuality: React.FC = () => {
         setIsLoading(false);
       },
     });
+  }, []);
+
+  const fetchWeather = useCallback(() => {
+    // WeatherService.getCurrentWeather().subscribe({
+    //   next: (weather) => {
+    //     setWeather(weather);
+    //     setIsLoading(false);
+    //   },
+    //   error: (error) => {
+    //     console.error('Error while fetching weather data', error);
+    //     setIsLoading(false);
+    //   },
+    // });
   }, []);
 
   useEffect(() => {
@@ -99,6 +121,7 @@ const AirQuality: React.FC = () => {
                   profileImageUrl="https://avatars.githubusercontent.com/u/36321701?v=4"
                   contributorType="Individual"
                 />
+                <WeatherSummary weather={weather} />
               </LeftSide>
               <RightSide>
                 <AirQualityOverview airQuality={airQuality} />
