@@ -1,50 +1,20 @@
 import { Client } from '@stomp/stompjs';
 import { Skeleton } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
-import styled from 'styled-components';
 
 import {
   AirQualityHeader,
   AirQualityOverview,
+  Container,
+  ContentWrapper,
   ContributorSource,
+  HeaderContainer,
   LeftSide,
   RightSide,
   WeatherSummary,
 } from '@components';
 import { AirQuality, WeatherSensor } from '@models';
 import { AirQualityService } from '@services';
-
-const Container = styled.div`
-  width: 100%;
-  margin-right: auto;
-  margin-left: auto;
-  padding-right: 18px;
-  padding-left: 18px;
-
-  @media only screen and (min-width: 600px) {
-    padding-right: 32px;
-    padding-left: 32px;
-  }
-
-  @media only screen and (min-width: 1440px) {
-    max-width: 1440px;
-  }
-
-  @media only screen and (min-width: 1500px) {
-    padding: 0;
-  }
-`;
-
-const HeaderContainer = styled(Container)`
-  margin-top: 15px;
-  margin-bottom: 24px;
-`;
-
-const ContentWrapper = styled(Container)`
-  display: flex;
-  justify-content: space-between;
-  padding-bottom: 72px;
-`;
 
 const Realtime: React.FC = () => {
   const [airQuality, setAirQuality] = useState<AirQuality>(null);

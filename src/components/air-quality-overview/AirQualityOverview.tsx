@@ -3,7 +3,9 @@ import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { SectionTitle } from '@components';
+import { AQICategory } from '@enums';
 import { AirQuality } from '@models';
+import { getAQICategory } from '@utils';
 import AQIBanner from './components/AQIBanner';
 import MainPollutionTable from './components/MainPollutionTable';
 import OtherPollutionTable from './components/OtherPollutionTable';
@@ -59,7 +61,7 @@ const AirQualityOverview: React.FC<AirQualityOverviewProps> = ({
   const [showWHOGuideline, setShowWHOGuideline] = useState<boolean>(false);
 
   useEffect(() => {
-    if (airQuality.pm25 > 5) {
+    if (getAQICategory(airQuality.aqi) !== AQICategory.GOOD) {
       setShowWHOGuideline(true);
     } else {
       setShowWHOGuideline(false);
