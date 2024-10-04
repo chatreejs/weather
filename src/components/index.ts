@@ -3,6 +3,7 @@ export { default as AirQualityHistorical } from './air-quality-historical/AirQua
 export { default as AirQualityOverview } from './air-quality-overview/AirQualityOverview';
 export { default as ContributorSource } from './contributor-source/ContributorSource';
 export { default as SectionTitle } from './section-title/SectionTitle';
+export { default as Card } from './ui/Card';
 export { default as Container } from './ui/Container';
 export { default as ContentWrapper } from './ui/ContentWrapper';
 export { default as HeaderContainer } from './ui/HeaderContainer';

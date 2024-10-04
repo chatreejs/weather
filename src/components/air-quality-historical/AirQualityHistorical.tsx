@@ -1,18 +1,14 @@
-import { Card, Flex, Radio, RadioChangeEvent } from 'antd';
+import { Flex, Radio, RadioChangeEvent } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { SectionTitle } from '@components';
+import { Card, SectionTitle } from '@components';
 import { AirQuality } from '@models';
 import { AirQualityService } from '@services';
 import AirQualityHistoricalChart from './components/AirQualityHistoricalChart';
 
 const HistoricalWrapper = styled.div`
   width: 100%;
-
-  .ant-card {
-    box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.08);
-  }
 
   .ant-card .ant-card-body {
     padding: 16px !important;

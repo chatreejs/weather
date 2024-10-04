@@ -1,8 +1,7 @@
-import { Card } from 'antd';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
-import { SectionTitle } from '@components';
+import { Card, SectionTitle } from '@components';
 import { AQICategory } from '@enums';
 import { AirQuality } from '@models';
 import { getAQICategory } from '@utils';
@@ -17,10 +16,6 @@ const OverviewWrapper = styled.div`
 
   @media only screen and (min-width: 960px) {
     margin-bottom: 24px;
-  }
-
-  .ant-card {
-    box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.08);
   }
 
   .ant-card .ant-card-body {

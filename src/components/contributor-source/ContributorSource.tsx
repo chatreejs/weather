@@ -1,5 +1,5 @@
-import { SectionTitle } from '@components';
-import { Card, Flex } from 'antd';
+import { Card, SectionTitle } from '@components';
+import { Flex } from 'antd';
 import React from 'react';
 import styled from 'styled-components';
 
@@ -12,7 +12,6 @@ const ContributorWrapper = styled.div`
 
   .ant-card {
     padding: 24px;
-    box-shadow: 0 2px 20px 0 rgba(0, 0, 0, 0.08);
   }
 
   .ant-card .ant-card-body {
