@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Card, SectionTitle } from '@components';
-import { WeatherSensor } from '@models';
+import { Weather } from '@models';
 import WeatherDetailTable from './components/WeatherDetailTable';
 import WeatherSummaryImage from './components/WeatherSummaryImage';
 
@@ -39,13 +39,13 @@ const SummaryWrapper = styled.div`
 `;
 
 interface WeatherSummaryProps {
-  weatherSensor: WeatherSensor;
+  weather: Weather;
 }
 
-const WeatherSummary: React.FC<WeatherSummaryProps> = ({ weatherSensor }) => (
+const WeatherSummary: React.FC<WeatherSummaryProps> = ({ weather }) => (
   <WeatherWrapper>
     <Card bordered={false}>
-      {!weatherSensor ? (
+      {!weather ? (
         <StyledSkeleton active={true} />
       ) : (
         <>
@@ -60,12 +60,12 @@ const WeatherSummary: React.FC<WeatherSummaryProps> = ({ weatherSensor }) => (
                   fontWeight: 500,
                 }}
               >
-                What is the current weather in {weatherSensor?.location}?
+                What is the current weather in {weather?.location}?
               </h2>
             </div>
             <WeatherSummaryImage />
           </SummaryWrapper>
-          <WeatherDetailTable weatherSensor={weatherSensor} />
+          <WeatherDetailTable weather={weather} />
         </>
       )}
     </Card>

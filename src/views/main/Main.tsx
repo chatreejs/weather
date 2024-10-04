@@ -13,23 +13,16 @@ import {
   RightSide,
   WeatherSummary,
 } from '@components';
-import { AirQuality, WeatherSensor } from '@models';
-import { AirQualityService } from '@services';
+import { AirQuality, Weather } from '@models';
+import { AirQualityService, WeatherService } from '@services';
 
 const Main: React.FC = () => {
   const [airQuality, setAirQuality] = useState<AirQuality>(null);
-  const [weatherSensor, setWeatherSensor] = useState<WeatherSensor>({
-    temperature: 25,
-    humidity: 61,
-    pressure: 1100,
-    lastUpdate: '',
-    source: 'mock',
-    location: 'Aspire Asoke-Ratchada, Bangkok',
-  });
+  const [weather, setWeather] = useState<Weather>(null);
   const [isAirQualityLoading, setIsAirQualityLoading] = useState<boolean>(true);
   const [isMobile] = useState<boolean>(window.innerWidth < 960);
 
-  const fetchAirQuality = useCallback(() => {
+  const fetchAirQualityData = useCallback(() => {
     AirQualityService.getCurrentAirQuality().subscribe({
       next: (airQuality) => {
         airQuality.location = 'Aspire Asoke-Ratchada, Bangkok';
@@ -43,22 +36,21 @@ const Main: React.FC = () => {
     });
   }, []);
 
-  const fetchWeather = useCallback(() => {
-    // WeatherService.getCurrentWeather().subscribe({
-    //   next: (weather) => {
-    //     setWeather(weather);
-    //     setIsLoading(false);
-    //   },
-    //   error: (error) => {
-    //     console.error('Error while fetching weather data', error);
-    //     setIsLoading(false);
-    //   },
-    // });
+  const fetchWeatherData = useCallback(() => {
+    WeatherService.getCurrentWeather().subscribe({
+      next: (weather) => {
+        setWeather(weather);
+      },
+      error: (error) => {
+        console.error('Error while fetching weather data', error);
+      },
+    });
   }, []);
 
   useEffect(() => {
-    fetchAirQuality();
-  }, [fetchAirQuality]);
+    fetchAirQualityData();
+    fetchWeatherData();
+  }, [fetchAirQualityData, fetchWeatherData]);
 
   return (
     <>
@@ -82,7 +74,7 @@ const Main: React.FC = () => {
                   profileImageUrl="https://avatars.githubusercontent.com/u/36321701?v=4"
                   contributorType="Individual"
                 />
-                <WeatherSummary weatherSensor={weatherSensor} />
+                <WeatherSummary weather={weather} />
               </LeftSide>
               <RightSide>
                 <AirQualityOverview airQuality={airQuality} />
@@ -103,7 +95,7 @@ const Main: React.FC = () => {
                 profileImageUrl="https://avatars.githubusercontent.com/u/36321701?v=4"
                 contributorType="Individual"
               />
-              <WeatherSummary weatherSensor={weatherSensor} />
+              <WeatherSummary weather={weather} />
               <AirQualityHistorical location={airQuality.location} />
             </>
           )}

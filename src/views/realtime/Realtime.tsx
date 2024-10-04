@@ -13,12 +13,12 @@ import {
   RightSide,
   WeatherSummary,
 } from '@components';
-import { AirQuality, WeatherSensor } from '@models';
-import { AirQualityService } from '@services';
+import { AirQuality, Weather } from '@models';
+import { AirQualityService, WeatherService } from '@services';
 
 const Realtime: React.FC = () => {
   const [airQuality, setAirQuality] = useState<AirQuality>(null);
-  const [weatherSensor, setWeatherSensor] = useState<WeatherSensor>(null);
+  const [weather, setWeather] = useState<Weather>(null);
   const [isAirQualityLoading, setIsAirQualityLoading] = useState<boolean>(true);
   const [isMobile] = useState<boolean>(window.innerWidth < 960);
   const location = 'Aspire Asoke-Ratchada, Bangkok';
@@ -37,9 +37,21 @@ const Realtime: React.FC = () => {
     });
   }, [location]);
 
-  const handleWeatherSensorMessage = (message) => {
-    const body: WeatherSensor = JSON.parse(message.body);
-    setWeatherSensor({
+  const fetchWeatherData = useCallback(() => {
+    WeatherService.getRealtimeWeather().subscribe({
+      next: (weather) => {
+        weather.location = location;
+        setWeather(weather);
+      },
+      error: (error) => {
+        console.error('Error while fetching weather data', error);
+      },
+    });
+  }, []);
+
+  const handleWeatherMessage = (message) => {
+    const body: Weather = JSON.parse(message.body);
+    setWeather({
       location: location,
       ...body,
     });
@@ -62,7 +74,7 @@ const Realtime: React.FC = () => {
     weatherStompClient.onConnect = () => {
       weatherStompClient.subscribe(
         '/topic/weather-sensor',
-        handleWeatherSensorMessage,
+        handleWeatherMessage,
       );
       weatherStompClient.subscribe(
         '/topic/air-quality',
@@ -79,7 +91,8 @@ const Realtime: React.FC = () => {
 
   useEffect(() => {
     fetchAirQualityData();
-  }, [fetchAirQualityData]);
+    fetchWeatherData();
+  }, [fetchAirQualityData, fetchWeatherData]);
 
   useEffect(() => {
     const stompClient = setupStompClient();
@@ -110,7 +123,7 @@ const Realtime: React.FC = () => {
                   profileImageUrl="https://avatars.githubusercontent.com/u/36321701?v=4"
                   contributorType="Individual"
                 />
-                <WeatherSummary weatherSensor={weatherSensor} />
+                <WeatherSummary weather={weather} />
               </LeftSide>
               <RightSide>
                 <AirQualityOverview airQuality={airQuality} />
@@ -130,7 +143,7 @@ const Realtime: React.FC = () => {
                 profileImageUrl="https://avatars.githubusercontent.com/u/36321701?v=4"
                 contributorType="Individual"
               />
-              <WeatherSummary weatherSensor={weatherSensor} />
+              <WeatherSummary weather={weather} />
             </>
           )}
         </Container>
