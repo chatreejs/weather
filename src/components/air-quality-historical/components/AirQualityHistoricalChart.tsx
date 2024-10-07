@@ -3,8 +3,8 @@ import HighchartsReact from 'highcharts-react-official';
 import { useEffect, useState } from 'react';
 
 import { AQICategory } from '@enums';
-import { AirQuality } from '@models';
 import { getAQIBoundary, getAQICategory, getAQICategoryFromPM25 } from '@utils';
+import { AirQuality } from '../@interfaces';
 
 interface AirQualityHistoricalChartProps {
   airQualityList: AirQuality[];

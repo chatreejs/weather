@@ -25,7 +25,7 @@
       "@context": ["./src/context"],
       "@enums": ["./src/enums"],
       "@hooks": ["./src/hooks"],
-      "@models": ["./src/models"],
+      "@interfaces": ["./src/interfaces"],
       "@services": ["./src/services"],
       "@utils": ["./src/utils"],
       "@views": ["./src/views"]

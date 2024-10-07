@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { AQICategory } from '@enums';
-import { AirQuality } from '@models';
 import {
   getAQICategoryFromCO,
   getAQICategoryFromNO2,
@@ -11,6 +10,7 @@ import {
   getAQICategoryFromSO2,
 } from '@utils';
 import { Progress } from 'antd';
+import { AirQuality } from '../@interfaces';
 
 const Table = styled.table`
   border-collapse: collapse;

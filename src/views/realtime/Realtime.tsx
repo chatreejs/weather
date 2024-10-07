@@ -13,7 +13,7 @@ import {
   RightSide,
   WeatherSummary,
 } from '@components';
-import { AirQuality, Weather } from '@models';
+import { AirQuality, Weather } from '@interfaces';
 import { AirQualityService, WeatherService } from '@services';
 
 const Realtime: React.FC = () => {

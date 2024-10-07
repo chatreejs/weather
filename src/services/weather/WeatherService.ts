@@ -1,7 +1,7 @@
 import { from, map, Observable } from 'rxjs';
 
 import { axiosInstance } from '@config';
-import { Weather } from '@models';
+import { Weather } from '@interfaces';
 
 export class WeatherService {
   private static readonly apiEndpoint = '/weather';

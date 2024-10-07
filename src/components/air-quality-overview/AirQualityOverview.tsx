@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 import { Card, SectionTitle } from '@components';
 import { AQICategory } from '@enums';
-import { AirQuality } from '@models';
+import { AirQuality } from '@interfaces';
 import { getAQICategory } from '@utils';
 import AQIBanner from './components/AQIBanner';
 import MainPollutionTable from './components/MainPollutionTable';

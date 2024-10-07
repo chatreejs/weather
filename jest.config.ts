@@ -14,7 +14,7 @@ export default {
     '@context': '<rootDir>/src/context',
     '@enums': '<rootDir>/src/enums',
     '@hooks': '<rootDir>/src/hooks',
-    '@models': '<rootDir>/src/models',
+    '@interfaces': '<rootDir>/src/interfaces',
     '@services': '<rootDir>/src/services',
     '@utils': '<rootDir>/src/utils',
     '@views': '<rootDir>/src/views',

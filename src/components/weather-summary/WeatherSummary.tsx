@@ -3,7 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 
 import { Card, SectionTitle } from '@components';
-import { Weather } from '@models';
+import { Weather } from '@interfaces';
 import WeatherDetailTable from './components/WeatherDetailTable';
 import WeatherSummaryImage from './components/WeatherSummaryImage';
 

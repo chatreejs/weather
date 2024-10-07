@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { AQICategory } from '@enums';
-import { AirQuality } from '@models';
 import { getAQICategoryFromPM25 } from '@utils';
+import { AirQuality } from '../@interfaces';
 
 const WHOGuidelineWrapper = styled.div`
   margin-top: 32px;

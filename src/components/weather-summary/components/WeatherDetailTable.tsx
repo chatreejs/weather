@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 
-import { Weather } from '@models';
+import { Weather } from '../@interfaces';
 
 const TableWrapper = styled.div`
   padding: 16px;

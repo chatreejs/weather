@@ -1,7 +1,7 @@
 import { from, map, Observable } from 'rxjs';
 
 import { axiosInstance } from '@config';
-import { AirQuality } from '@models';
+import { AirQuality } from '@interfaces';
 
 export class AirQualityService {
   private static readonly apiEndpoint = '/air-quality';

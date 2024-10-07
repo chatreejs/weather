@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 import { Card, SectionTitle } from '@components';
-import { AirQuality } from '@models';
+import { AirQuality } from '@interfaces';
 import { AirQualityService } from '@services';
 import AirQualityHistoricalChart from './components/AirQualityHistoricalChart';
 
