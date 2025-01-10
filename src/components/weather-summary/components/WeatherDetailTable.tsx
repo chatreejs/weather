@@ -45,15 +45,23 @@ const WeatherDetailTable: React.FC<WeatherDetailTableProps> = ({ weather }) => {
         <tbody>
           <tr>
             <td>Temperature</td>
-            <td>{weather?.temperature.toFixed(2)}°C</td>
+            <td>
+              {weather.temperature
+                ? `${weather.temperature.toFixed(2)} °C`
+                : 'N/A'}
+            </td>
           </tr>
           <tr>
             <td>Humidity</td>
-            <td>{weather?.humidity.toFixed(2)}%</td>
+            <td>
+              {weather.humidity ? `${weather.humidity.toFixed(2)} %` : 'N/A'}
+            </td>
           </tr>
           <tr>
             <td>Pressure</td>
-            <td>{weather?.pressure.toFixed(2)} hPa</td>
+            <td>
+              {weather.pressure ? `${weather.pressure?.toFixed(2)} hPa` : 'N/A'}
+            </td>
           </tr>
         </tbody>
       </table>
