@@ -21,10 +21,12 @@ const Realtime: React.FC = () => {
   const [weather, setWeather] = useState<Weather>(null);
   const [isAirQualityLoading, setIsAirQualityLoading] = useState<boolean>(true);
   const [isMobile] = useState<boolean>(window.innerWidth < 960);
+
   const location = 'Aspire Asoke-Ratchada, Bangkok';
+  const probeId = 'TH-10-0001';
 
   const fetchAirQualityData = useCallback(() => {
-    AirQualityService.getRealtimeAirQuality().subscribe({
+    AirQualityService.getRealtimeAirQuality(probeId).subscribe({
       next: (airQuality) => {
         airQuality.location = location;
         setAirQuality(airQuality);
@@ -77,7 +79,7 @@ const Realtime: React.FC = () => {
         handleWeatherMessage,
       );
       weatherStompClient.subscribe(
-        '/topic/air-quality',
+        `/topic/air-quality/${probeId}`,
         handleAirQualityMessage,
       );
     };

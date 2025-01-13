@@ -38,10 +38,12 @@ const ChartWrapper = styled.div`
 `;
 
 interface AirQualityHistoricalProps {
+  probeId: string;
   location: string;
 }
 
 const AirQualityHistorical: React.FC<AirQualityHistoricalProps> = ({
+  probeId,
   location,
 }) => {
   const [airQuality, setAirQuality] = useState<AirQuality[]>([]);
@@ -57,7 +59,7 @@ const AirQualityHistorical: React.FC<AirQualityHistoricalProps> = ({
   };
 
   const fetchAirQualityHistory = useCallback(() => {
-    AirQualityService.getAirQualityHistory(interval).subscribe({
+    AirQualityService.getAirQualityHistory(probeId, interval).subscribe({
       next: (airQuality) => {
         setAirQuality(airQuality);
       },

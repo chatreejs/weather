@@ -6,25 +6,31 @@ import { AirQuality } from '@interfaces';
 export class AirQualityService {
   private static readonly apiEndpoint = '/air-quality';
 
-  static getCurrentAirQuality(): Observable<AirQuality> {
+  static getCurrentAirQuality(probeId: string): Observable<AirQuality> {
     return from(
-      axiosInstance.get<AirQuality>(`${this.apiEndpoint}/current`),
+      axiosInstance.get<AirQuality>(`${this.apiEndpoint}/current/${probeId}`),
     ).pipe(map((response) => response.data));
   }
 
-  static getRealtimeAirQuality(): Observable<AirQuality> {
+  static getRealtimeAirQuality(probeId: string): Observable<AirQuality> {
     return from(
-      axiosInstance.get<AirQuality>(`${this.apiEndpoint}/realtime`),
+      axiosInstance.get<AirQuality>(`${this.apiEndpoint}/realtime/${probeId}`),
     ).pipe(map((response) => response.data));
   }
 
-  static getAirQualityHistory(interval: string): Observable<AirQuality[]> {
+  static getAirQualityHistory(
+    probeId: string,
+    interval: string,
+  ): Observable<AirQuality[]> {
     const params = new URLSearchParams();
     params.append('interval', interval);
     return from(
-      axiosInstance.get<AirQuality[]>(`${this.apiEndpoint}/history`, {
-        params,
-      }),
+      axiosInstance.get<AirQuality[]>(
+        `${this.apiEndpoint}/history/${probeId}`,
+        {
+          params,
+        },
+      ),
     ).pipe(map((response) => response.data));
   }
 }

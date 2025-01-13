@@ -22,10 +22,13 @@ const Main: React.FC = () => {
   const [isAirQualityLoading, setIsAirQualityLoading] = useState<boolean>(true);
   const [isMobile] = useState<boolean>(window.innerWidth < 960);
 
+  const location = 'Aspire Asoke-Ratchada, Bangkok';
+  const probeId = 'TH-10-0001';
+
   const fetchAirQualityData = useCallback(() => {
-    AirQualityService.getCurrentAirQuality().subscribe({
+    AirQualityService.getCurrentAirQuality(probeId).subscribe({
       next: (airQuality) => {
-        airQuality.location = 'Aspire Asoke-Ratchada, Bangkok';
+        airQuality.location = location;
         setAirQuality(airQuality);
         setIsAirQualityLoading(false);
       },
@@ -78,7 +81,10 @@ const Main: React.FC = () => {
               </LeftSide>
               <RightSide>
                 <AirQualityOverview airQuality={airQuality} />
-                <AirQualityHistorical location={airQuality.location} />
+                <AirQualityHistorical
+                  probeId={probeId}
+                  location={airQuality.location}
+                />
               </RightSide>
             </>
           )}
@@ -96,7 +102,10 @@ const Main: React.FC = () => {
                 contributorType="Individual"
               />
               <WeatherSummary weather={weather} />
-              <AirQualityHistorical location={airQuality.location} />
+              <AirQualityHistorical
+                probeId={probeId}
+                location={airQuality.location}
+              />
             </>
           )}
         </Container>
